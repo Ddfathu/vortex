@@ -1,0 +1,16 @@
+#!/bin/bash
+DATA_DIR="${DATA_DIR:-/data}"
+USERS_FILE="$DATA_DIR/users.txt"
+touch "$USERS_FILE"
+clear
+echo "╔══════════════════════════════════════╗"
+echo "║       VORTEX PROJECT - SSH LIST      ║"
+echo "╚══════════════════════════════════════╝"
+TODAY=$(date +%F)
+printf "%-20s %-14s %-10s\n" "USERNAME" "EXPIRED" "STATUS"
+echo "------------------------------------------------"
+while IFS=: read -r U P E; do
+  [ -z "$U" ] && continue
+  if [ -z "$E" ] || [ "$E" \> "$TODAY" ] || [ "$E" = "$TODAY" ]; then S="ACTIVE"; else S="EXPIRED"; fi
+  printf "%-20s %-14s %-10s\n" "$U" "$E" "$S"
+done < "$USERS_FILE"
