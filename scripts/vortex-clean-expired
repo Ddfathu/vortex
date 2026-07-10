@@ -1,0 +1,17 @@
+#!/bin/bash
+DATA_DIR="${DATA_DIR:-/data}"
+USERS_FILE="$DATA_DIR/users.txt"
+touch "$USERS_FILE"
+TODAY=$(date +%F)
+TMP="$USERS_FILE.tmp"
+: > "$TMP"
+while IFS=: read -r U P E; do
+  [ -z "$U" ] && continue
+  if [ -z "$E" ] || [ "$E" \> "$TODAY" ] || [ "$E" = "$TODAY" ]; then
+    echo "$U:$P:$E" >> "$TMP"
+  else
+    userdel -f "$U" >/dev/null 2>&1 || true
+    echo "Expired removed: $U"
+  fi
+done < "$USERS_FILE"
+mv "$TMP" "$USERS_FILE"
