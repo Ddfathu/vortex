@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+DATA_DIR="${DATA_DIR:-/data}"
+USERS_FILE="$DATA_DIR/users.txt"
+mkdir -p "$DATA_DIR"; touch "$USERS_FILE"
+clear
+echo "╔══════════════════════════════════════╗"
+echo "║       VORTEX PROJECT - ADD SSH       ║"
+echo "╚══════════════════════════════════════╝"
+read -rp "Username       : " USERNAME
+read -rsp "Password       : " PASSWORD; echo
+read -rp "Expired (hari) : " DAYS
+if [[ ! "$USERNAME" =~ ^[a-zA-Z_][a-zA-Z0-9_-]{2,31}$ ]]; then echo "Username tidak valid"; exit 1; fi
+if [ -z "$PASSWORD" ] || [ ${#PASSWORD} -lt 4 ]; then echo "Password minimal 4 karakter"; exit 1; fi
+if ! [[ "$DAYS" =~ ^[0-9]+$ ]] || [ "$DAYS" -lt 1 ]; then echo "Hari tidak valid"; exit 1; fi
+EXP_DATE=$(date -d "+${DAYS} days" +%F)
+if ! id "$USERNAME" >/dev/null 2>&1; then useradd -m -s /bin/bash -e "$EXP_DATE" "$USERNAME"; else usermod -e "$EXP_DATE" "$USERNAME"; fi
+echo "$USERNAME:$PASSWORD" | chpasswd
+grep -v "^${USERNAME}:" "$USERS_FILE" > "$USERS_FILE.tmp" || true
+mv "$USERS_FILE.tmp" "$USERS_FILE"
+echo "$USERNAME:$PASSWORD:$EXP_DATE" >> "$USERS_FILE"
+HOST="${RAILWAY_PUBLIC_DOMAIN:-[domain-railway-anda]}"
+cat <<EOF
+
+✅ SSH ACCOUNT CREATED - VORTEX PROJECT
+Host/SNI : $HOST
+Port     : 443
+Path     : /ssh-ws
+Username : $USERNAME
+Password : $PASSWORD
+Expired  : $EXP_DATE
+Payload  : GET /ssh-ws HTTP/1.1[crlf]Host: $HOST[crlf]Upgrade: websocket[crlf][crlf]
+EOF
