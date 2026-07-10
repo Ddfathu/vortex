@@ -1,0 +1,24 @@
+#!/bin/bash
+while true; do
+clear
+cat <<'EOF'
+╔══════════════════════════════════════╗
+║        VORTEX PROJECT RAILWAY        ║
+╠══════════════════════════════════════╣
+║ 1. Add SSH User                      ║
+║ 2. List SSH User                     ║
+║ 3. Delete SSH User                   ║
+║ 4. Clean Expired                     ║
+║ 5. Exit                              ║
+╚══════════════════════════════════════╝
+EOF
+read -rp "Pilih menu: " x
+case "$x" in
+  1) addssh; read -rp "Enter untuk kembali..." _;;
+  2) listssh; read -rp "Enter untuk kembali..." _;;
+  3) delssh; read -rp "Enter untuk kembali..." _;;
+  4) vortex-clean-expired; read -rp "Enter untuk kembali..." _;;
+  5) exit 0;;
+  *) echo "Salah pilih"; sleep 1;;
+esac
+done
