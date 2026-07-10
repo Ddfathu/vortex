@@ -1,0 +1,16 @@
+{
+  "name": "vortex-project-railway-core",
+  "version": "2.0.0",
+  "description": "VORTEX PROJECT Final Railway Core: SSH WebSocket + VLESS/Trojan gateway + dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js"
+  },
+  "dependencies": {
+    "ws": "^8.17.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
