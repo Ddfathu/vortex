@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+DATA_DIR="${DATA_DIR:-/data}"
+USERS_FILE="$DATA_DIR/users.txt"
+touch "$USERS_FILE"
+clear
+echo "╔══════════════════════════════════════╗"
+echo "║      VORTEX PROJECT - DELETE SSH     ║"
+echo "╚══════════════════════════════════════╝"
+mapfile -t USERS < <(cut -d: -f1 "$USERS_FILE" | sed '/^$/d')
+if [ ${#USERS[@]} -eq 0 ]; then echo "Belum ada user."; exit 0; fi
+for i in "${!USERS[@]}"; do printf "%2d. %s\n" "$((i+1))" "${USERS[$i]}"; done
+read -rp "Pilih nomor: " N
+if ! [[ "$N" =~ ^[0-9]+$ ]] || [ "$N" -lt 1 ] || [ "$N" -gt ${#USERS[@]} ]; then echo "Pilihan tidak valid"; exit 1; fi
+U="${USERS[$((N-1))]}"
+userdel -f "$U" >/dev/null 2>&1 || true
+grep -v "^${U}:" "$USERS_FILE" > "$USERS_FILE.tmp" || true
+mv "$USERS_FILE.tmp" "$USERS_FILE"
+echo "✅ User $U dihapus."
