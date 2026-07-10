@@ -1,0 +1,44 @@
+# ============================================================
+# VORTEX PROJECT ENV
+# Edit file ini lalu redeploy Railway.
+# Catatan:
+# - Railway Variables tetap menang kalau nama variable sama.
+# - Jangan upload token asli ke repo publik.
+# - Untuk production, token rahasia lebih aman di Railway Variables.
+# ============================================================
+
+# Cloudflare Tunnel / Argo
+CF_TUNNEL_TOKEN=token_cloudflare_kamu
+
+# Storage user SSH
+DATA_DIR=/data
+
+# Port internal
+SSH_PORT=22
+SSH_SSL_PORT=2443
+WS_INTERNAL_PORT=8880
+
+# Password konfirmasi tombol hapus user
+ADMIN_PASS=Vortex
+
+# SSH WS / Cloudflare Tunnel
+PUBLIC_HOST=ssh-ws.nizwara.qzz.io
+SSH_PUBLIC_HOST=ssh-ws.nizwara.qzz.io
+SSH_PUBLIC_PATH=/
+
+# VLESS/Trojan WS
+XRAY_PUBLIC_HOST=vortex.nizwara.qzz.io
+
+# VLESS/Trojan SNI
+SNI_PUBLIC_HOST=vorte-x-production.up.railway.app
+
+# SSH SNI dari Railway TCP Proxy
+# Buat TCP Proxy Railway untuk internal port 2443
+# Contoh Railway kasih: hayabusa.proxy.rlwy.net:31711
+# Maka isi:
+SSH_SNI_HOST=hayabusa.proxy.rlwy.net
+SSH_SNI_PORT=31711
+
+# Opsional. Kosongkan kalau tidak mau user bawaan.
+# SSH_USER=vortex
+# SSH_PASSWORD=password_kuat
